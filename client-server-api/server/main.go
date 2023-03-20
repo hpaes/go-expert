@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"net/http"
+	"path"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -21,7 +22,7 @@ var (
 )
 
 func main() {
-	db, err := sql.Open("sqlite3", "../database/database.db")
+	db, err := sql.Open("sqlite3", path.Join("database", "database.db"))
 	if err != nil {
 		panic(err)
 	}
