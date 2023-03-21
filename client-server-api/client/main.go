@@ -9,19 +9,20 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"time"
 )
 
 var (
 	serverTimeOut = 300 * time.Millisecond
 	serverURL     = "http://localhost:8080/cotacao"
+	filePath      = path.Join("./", "client", "cotacao.txt")
 )
 
 func main() {
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, serverTimeOut)
 	defer cancel()
-
 	req, err := http.NewRequestWithContext(ctx, "GET", serverURL, nil)
 	if err != nil {
 		log.Fatalf("error creating request: %v", err)
@@ -51,12 +52,12 @@ func fileCreation(responseBody []byte) {
 	bid := result["bid"].(string)
 
 	// check if file exists
-	_, err = os.Stat("cotacao.txt")
+	_, err = os.Stat(filePath)
 	fileExists := !os.IsNotExist(err)
 
 	var file *os.File
 	if fileExists {
-		file, err = os.OpenFile("cotacao.txt", os.O_APPEND|os.O_WRONLY, 0644)
+		file, err = os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, 0644)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -65,7 +66,7 @@ func fileCreation(responseBody []byte) {
 		fmt.Fprintf(writer, "\nDólar: {%s}", bid)
 		writer.Flush()
 	} else {
-		file, err = os.Create("cotacao.txt")
+		file, err = os.Create(filePath)
 		if err != nil {
 			log.Fatal(err)
 		}
