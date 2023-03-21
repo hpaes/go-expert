@@ -16,7 +16,7 @@ type Exchange struct {
 }
 
 var (
-	apiTimeOut = 200 * time.Millisecond
+	apiTimeOut = 250 * time.Millisecond
 	dbTimeOut  = 10 * time.Millisecond
 	apiUrl     = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
 )
